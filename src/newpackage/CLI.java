@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author JA
  */
-public class test {
+public class CLI {
 
     private Scanner input = new Scanner(System.in);
     private ConceptList c;
@@ -20,26 +20,10 @@ public class test {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-//        System.out.println("[1]");
-//        ConceptList c = new ConceptList();
-//        c.setSuper("vehicle");
-//        c.addChild("vehicle", "car");
-//        c.addChild("car", "wheel");
-//        c.addChild("car", "door");
-//        c.addChild("vehicle", "train");
-//        c.addChild("train", "rails");
-//        c.printTreeGraphic();
-//        c.removeSelf("car");
-//        c.printTreeGraphic();
-//        c.addParent("wheel", "car");
-//        c.addParent("door", "car");
-//        c.printTreeGraphic();
-//        
-        test t = new test();
+        CLI cli = new CLI();
     }
     
-    public test(){
+    public CLI(){
         c = new ConceptList();
         mainloop();
     }
