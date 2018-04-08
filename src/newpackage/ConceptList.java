@@ -43,10 +43,13 @@ public class ConceptList {
         newParent.addChild(child);
         child.getParent().removeChild(child);
         child.setParent(newParent);
+        //loop through each child of the ori node to increment level
         return true;
     }
     
     public boolean addChild(String ID, String value){
+        System.out.println(ID);
+        printTreeGraphic();
         Concept parent = search(ID);
         if(debug) System.out.println(value+" add to "+parent.getValue());
         //if the value already exists
@@ -143,6 +146,8 @@ public class ConceptList {
     }
     
     public void setConceptGUI(String value, int level, int pos_x, int pos_y, int size_x, int size_y, int mid_x, int mid_y){
+        mid_x = pos_x + (size_x/2);
+        mid_y = pos_y + (size_y/2);
         search(value).setGUIData(level, pos_x, pos_y, size_x, size_y, mid_x, mid_y);
     }
 }

@@ -22,8 +22,8 @@ public class CLI {
      */
     public static void main(String[] args) {
         
-//        GUI gui = new GUI();
-        CLI cli = new CLI();
+        GUI gui = new GUI();
+        //CLI cli = new CLI();
     }
     
     public CLI(){

@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -42,7 +43,7 @@ public class GUI {
                 text = JOptionPane.showInputDialog("Input Super Node");
                 conceptlist.setSuper(text);
                 //set GUI data
-                conceptlist.setConceptGUI(text,0, 0, 0, 0, 0, 0, 0);
+                conceptlist.setConceptGUI(text,0, 20, 20, 100, 50, 0, 0);
                 //recreate draw here
                 redraw();
 //                frame.revalidate();
@@ -55,11 +56,27 @@ public class GUI {
         JButton button2 = new JButton("Add parent");
         button2.setSize(100,100);
         button2.setLocation(10, 110);
+        
         //frame.add(button2);
         
         JButton button3 = new JButton("Add child");
         button3.setSize(100,100);
         button3.setLocation(10, 210);
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text;
+                text = JOptionPane.showInputDialog("Input Child Node");
+                conceptlist.addChild(drawPanel.getSelected(), text);
+                //set GUI data
+                conceptlist.setConceptGUI(text, conceptlist.search(drawPanel.getSelected()).getGUIData("level")+1, 70, 0, 100, 50, 0, 0);
+                checkOverlapping(conceptlist.getAll());
+                //recreate draw here
+                redraw();
+//                frame.revalidate();
+//                frame.repaint();
+            }
+        });
         //frame.add(button3);
         
         JPanel panelB = new JPanel(new GridBagLayout());
@@ -91,6 +108,45 @@ public class GUI {
         this.frame.add(this.drawPanel,BorderLayout.CENTER);
         this.frame.revalidate();
         this.frame.repaint();
+    }
+    
+    public void checkOverlapping(ArrayList<Concept> concepts) {
+        String overlap = "";
+        for (int i = 0; i < concepts.size(); i++) {
+            Concept con = concepts.get(i);
+            for (int j = 0; j < concepts.size(); j++) {
+                if(i == j){
+                continue;
+                }
+                else{
+                    Concept con2 = concepts.get(j);
+                    float rx2 = (float) Math.pow(con2.getGUIData("size_x") / 2, 2);
+                    float ry2 = (float) Math.pow(con2.getGUIData("size_y") / 2, 2);
+                    float a = (float) Math.pow(con.getGUIData("pos_x") - con2.getGUIData("mid_x"), 2);
+                    float b = (float) Math.pow(con.getGUIData("mid_y") - con2.getGUIData("mid_y"), 2);
+                    float total = a / rx2 + b / ry2;
+                    float a2 = (float) Math.pow(con.getGUIData("pos_x")+con.getGUIData(("size_x")) - con2.getGUIData("mid_x"), 2);
+                    float b2 = (float) Math.pow(con.getGUIData("mid_y") - con2.getGUIData("mid_y"), 2);
+                    float total2 = a2 / rx2 + b2 / ry2;
+                    
+                    //System.out.println(total);
+                    if (total <= 1 || total <= 1) {
+                        //System.out.println("inside");
+                        overlap = con.getValue();
+                        System.out.println("overlap");
+                        //System.out.println(inside);
+                        break;
+                        
+                    }
+                    else{
+                        System.out.println("no");
+                        overlap = "";
+                    }
+                    System.out.println(overlap);
+                }
+            }
+            
+        }
     }
     
 }
