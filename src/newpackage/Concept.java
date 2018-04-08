@@ -7,6 +7,7 @@
 package newpackage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -16,6 +17,7 @@ public class Concept {
     private Concept parent;
     private ArrayList<Concept> child;
     private String value;
+    private HashMap<String,Integer> GUIData;
     public int ID;
     
     public Concept(String v, int ID){
@@ -23,6 +25,21 @@ public class Concept {
         child = new ArrayList<>();
         this.value = v;
         this.ID = ID;
+        this.GUIData = new HashMap<>();
+    }
+    
+    public void setGUIData(int level, int pos_x, int pos_y, int size_x, int size_y, int mid_x, int mid_y){
+        this.GUIData.put("level",level);
+        this.GUIData.put("pos_x",pos_x);
+        this.GUIData.put("pos_y",pos_y);
+        this.GUIData.put("size_x",size_x);
+        this.GUIData.put("size_y",size_y);
+        this.GUIData.put("mid_x",mid_x);
+        this.GUIData.put("mid_y",mid_y);
+    }
+    
+    public int getGUIData(String data){
+        return this.GUIData.get(data);
     }
     
     public void setParent(Concept p){

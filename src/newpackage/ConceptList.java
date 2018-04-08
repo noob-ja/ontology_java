@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class ConceptList {
     private Concept superConcept;
-    private int count = 0;
+    public int count = 0;
     private boolean debug = false;
     
     public void setSuper(String value){
@@ -115,6 +115,7 @@ public class ConceptList {
     }
     
     public Concept search(String id){
+        if(this.superConcept==null) return null;
         return search(id,superConcept);
     }
     
@@ -123,9 +124,25 @@ public class ConceptList {
             return startC;
         }
         Concept res = null;
-        for (int i=0; res == null && i<startC.getChild().size(); i++){
+        for (int i=0; res == null && i<startC.getChildSize(); i++){
             res = search(id, startC.getChild().get(i));
         }
         return res;
+    }
+    
+    public ArrayList<Concept> getAll(){
+        if(this.superConcept==null) return new ArrayList<Concept>();
+        return getAll(new ArrayList<Concept>(), this.superConcept);
+    }
+    
+    public ArrayList<Concept> getAll(ArrayList<Concept> list, Concept c){
+        list.add(c);
+        for(int i=0; i<c.getChildSize();i++){
+            list = getAll(list, c.getChild().get(i));
+        }return list;
+    }
+    
+    public void setConceptGUI(String value, int level, int pos_x, int pos_y, int size_x, int size_y, int mid_x, int mid_y){
+        search(value).setGUIData(level, pos_x, pos_y, size_x, size_y, mid_x, mid_y);
     }
 }
