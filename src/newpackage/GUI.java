@@ -61,11 +61,14 @@ public class GUI {
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(drawPanel.getSelected()==null){
+                if(drawPanel.getSelected()==null || drawPanel.getSelected().isEmpty()){
                     //prompt user to select a concept
                 }else{
                     String text;
                     text = JOptionPane.showInputDialog("Input Child Node");
+                    if(conceptlist.search(text)!=null){
+                        //same name, cannot add
+                    }
                     conceptlist.addChild(drawPanel.getSelected(), text);
                     conceptlist.setConceptGUI(text, conceptlist.search(drawPanel.getSelected()).getGUIData("level")+1);
 //                    checkOverlapping(conceptlist.getAll());
