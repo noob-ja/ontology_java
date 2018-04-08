@@ -6,10 +6,13 @@
 package newpackage;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -24,13 +27,20 @@ public class Draw extends JPanel {
     String inside = "";
     String selected = "";
     
+    int treeSize = 0;
+    int treeCenter = 0;
     final int size_x = 100;
     final int size_y = 50;
     final int size_pad = 10;
     final int level_height = 150;
+    final float rx2 = (float) Math.pow(size_x / 2, 2);
+    final float ry2 = (float) Math.pow(size_y / 2, 2);
+    final FontRenderContext frc = new FontRenderContext(null,true,true);
+    final Font f = new Font("TimesRoman", Font.BOLD, 12);
     
     public void setSize(){
-        if(concepts.size()>0) setSize(concepts.get(0),0);
+        if(concepts.size()>0) treeSize = setSize(concepts.get(0),0);
+        else treeSize = 0;
     }
     
     public int setSize(Concept c, int offset_x){
@@ -46,95 +56,83 @@ public class Draw extends JPanel {
         c.setGUIData("mid_y", (c.getGUIData("level")-1)*level_height+(level_height/2));
         c.setGUIData("pos_x", c.getGUIData("mid_x")-size_x/2);
         c.setGUIData("pos_y", c.getGUIData("mid_y")-size_y/2);
-        System.out.println(c.getGUIData("pos_x"));
-        System.out.println(c.getGUIData("pos_y"));
         return size;
     }
 
     public Draw(ConceptList conceptlist) {
-        // get all concept
         this.concepts = conceptlist.getAll();
         setSize();
         repaint();
 
         addMouseMotionListener(new MouseMotionListener() {
-
             @Override
             public void mouseMoved(MouseEvent e) {
-                
-                //System.out.println(e.getPoint());
+                treeCenter = (getWidth() - treeSize)/2;
                 for (int i = 0; i <concepts.size() ; i++) {
                     Concept c = concepts.get(i);
-                    float rx2 = (float) Math.pow(size_x / 2, 2);
-                    float ry2 = (float) Math.pow(size_y / 2, 2);
-                    float a = (float) Math.pow(e.getX() - c.getGUIData("mid_x"), 2);
-                    float b = (float) Math.pow(e.getY() - c.getGUIData("mid_y"), 2);
+                    float a = (float) Math.pow(e.getX() - (c.getGUIData("mid_x")+treeCenter), 2);
+                    float b = (float) Math.pow(e.getY() - (c.getGUIData("mid_y")), 2);
                     float total = a / rx2 + b / ry2;
                     if (total <= 1) {
                         inside = c.getValue();
                         break;
-                    }
-                    else{
+                    }else{
                         inside = "";
                     }
-
                 }
                 repaint();
             }
-
             @Override
             public void mouseDragged(MouseEvent e) {
+                
             }
         });
         
         addMouseListener(new MouseListener(){
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(!inside.equals("") ){
-                    selected = inside;
-                }
-                else{
-                    selected = "";
-                }
+                if(!inside.equals("")){selected = inside;}
+                else{selected = "";}
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
+            public void mousePressed(MouseEvent e) {}
             @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
+            public void mouseReleased(MouseEvent e) {}
             @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
+            public void mouseEntered(MouseEvent e) {}
             @Override
-            public void mouseExited(MouseEvent e) {
-            }
+            public void mouseExited(MouseEvent e) {}
             
         });
     }
 
     @Override
     public void paint(Graphics g) {
+        if(treeCenter == 0) treeCenter = (getWidth() - treeSize)/2;
         super.paint(g);
         for (int i = 0; i < this.concepts.size(); i++) {
             Concept c = this.concepts.get(i);
-            if(selected.equals(c.getValue())){
-                g.setColor(Color.red);
-            }else if (inside.equals(c.getValue())) {
+            if(c.getParent()!=null){
+                g.drawLine(c.getGUIData("mid_x")+treeCenter, c.getGUIData("mid_y"), c.getParent().getGUIData("mid_x")+treeCenter, c.getParent().getGUIData("mid_y"));
+            }
+        }
+        for (int i = 0; i < this.concepts.size(); i++) {
+            Concept c = this.concepts.get(i);
+            if (inside.equals(c.getValue())) {
                 g.setColor(Color.YELLOW);
             } else {
                 g.setColor(Color.WHITE);
             }
-            g.fillOval(c.getGUIData("pos_x"), c.getGUIData("pos_y"), size_x, size_y);
-            g.setColor(Color.BLACK);
-            g.drawString(c.getValue(), c.getGUIData("mid_x"), c.getGUIData("mid_y"));
-            if(c.getParent()!=null){
-                g.drawLine((int) c.getGUIData("mid_x"), (int) c.getGUIData("mid_y"), c.getParent().getGUIData("mid_x"), c.getParent().getGUIData("mid_y"));
+            if(selected.equals(c.getValue())){
+                g.setColor(Color.RED);
             }
+            g.fillOval(c.getGUIData("pos_x") + treeCenter, c.getGUIData("pos_y"), size_x, size_y);
+            g.setColor(Color.BLACK);
+            Rectangle2D r2D = f.getStringBounds(c.getValue(),frc);
+            int offset_x = (size_x/2) - ((int)Math.round(r2D.getWidth())/2) - (int)Math.round(r2D.getX());
+            int offset_y = (size_y/2) - ((int)Math.round(r2D.getHeight())/2) - (int)Math.round(r2D.getY());
+            g.drawString(c.getValue(), c.getGUIData("pos_x")+offset_x+treeCenter, c.getGUIData("pos_y")+offset_y);
         }
     }
     
