@@ -52,8 +52,9 @@ public class ConceptList {
         printTreeGraphic();
         Concept parent = search(ID);
         if(debug) System.out.println(value+" add to "+parent.getValue());
-        //if the value already exists
-        //return false;
+        if(search(value)!=null){
+            return false;
+        }
         Concept child = new Concept(value,count++);
         child.setParent(parent);
         parent.addChild(child);

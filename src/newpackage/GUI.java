@@ -150,7 +150,6 @@ public class GUI {
         redraw();
         
         frame.setVisible(true);
-        
     }
     
     public void redraw(){
