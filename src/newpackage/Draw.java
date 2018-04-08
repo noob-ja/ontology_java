@@ -22,27 +22,43 @@ public class Draw extends JPanel {
     
     private ArrayList<Concept> concepts;
     
-//    int n = 3;
-//    int level = 0;
-//    int superx = 10;
-//    int supery = 10;
-//    String text[] = {"animal", "mammals", "reptiles"};
-//    float pos_x[] = {500, 400, 700};
-//    float pos_y[] = {40, 300, 300};
-//    float size_x[] = {300, 150, 150};
-//    float size_y[] = {50, 50, 50};
-//    float midPointx[] = {650, 475, 775};
-//    float midPointy[] = {65, 325, 325};
-//    int connection[] = {0, 0, 0};
     String inside = "";
     String selected = "";
+    
+    final int size_x = 100;
+    final int size_y = 50;
+    final int size_pad = 10;
+    final int level_height = 150;
+    
+    public void setSize(){
+        if(concepts.size()>0) setSize(concepts.get(0),0);
+    }
+    
+    public int setSize(Concept c, int offset_x){
+        int size = 0;
+        if(c.getChildSize()<1){
+            size = this.size_x + (this.size_pad*2);
+        }else{
+            for(int i=0;i<c.getChildSize();i++){
+                size += setSize(c.getChild().get(i),size);
+            }
+        }
+        c.setGUIData("mid_x", size/2+offset_x);
+        c.setGUIData("mid_y", (c.getGUIData("level")-1)*level_height+(level_height/2));
+        c.setGUIData("pos_x", c.getGUIData("mid_x")-size_x/2);
+        c.setGUIData("pos_y", c.getGUIData("mid_y")-size_y/2);
+        System.out.println(c.getGUIData("pos_x"));
+        System.out.println(c.getGUIData("pos_y"));
+        return size;
+    }
 
     public Draw(ConceptList conceptlist) {
-      
-        System.out.println("aaaaaaa");
         // get all concept
         this.concepts = conceptlist.getAll();
-        System.out.println(this.concepts);
+        for(Concept c:concepts){
+            System.out.println(c.getValue());
+        }
+        setSize();
         repaint();
 
         addMouseMotionListener(new MouseMotionListener() {
@@ -55,8 +71,8 @@ public class Draw extends JPanel {
                     Concept c = concepts.get(i);
 //                    midPointx[i] = (int)pos_x[i] + (int)size_x[i] / 2;
 //                    midPointy[i] = (int)pos_y[i] + (int)size_y[i] / 2;
-                    float rx2 = (float) Math.pow(c.getGUIData("size_x") / 2, 2);
-                    float ry2 = (float) Math.pow(c.getGUIData("size_y") / 2, 2);
+                    float rx2 = (float) Math.pow(size_x / 2, 2);
+                    float ry2 = (float) Math.pow(size_y / 2, 2);
                     float a = (float) Math.pow(e.getX() - c.getGUIData("mid_x"), 2);
                     float b = (float) Math.pow(e.getY() - c.getGUIData("mid_y"), 2);
                     float total = a / rx2 + b / ry2;
@@ -78,7 +94,6 @@ public class Draw extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         });
         addMouseListener(new MouseListener(){
@@ -114,38 +129,23 @@ public class Draw extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//        for (int i = 0; i < n; i++) {
-//            if (inside == i) {
-//                //System.out.println("yy");
-//                g.setColor(Color.YELLOW);
-//            } else {
-//                //System.out.println("ww");
-//                g.setColor(Color.WHITE);
-//            }
-//            g.fillOval((int) pos_x[i], (int) pos_y[i], (int) size_x[i], (int) size_y[i]);
-//            g.setColor(Color.BLACK);
-//            g.drawString(text[i], (int) midPointx[i], (int) midPointy[i]);
-//            g.drawLine((int) midPointx[i], (int) midPointy[i], (int) midPointx[connection[i]], (int) midPointy[connection[i]]);
-//
-//        }
         for (int i = 0; i < this.concepts.size(); i++) {
             Concept c = this.concepts.get(i);
             if (inside.equals(c.getValue())) {
-                //System.out.println("yy");
                 g.setColor(Color.YELLOW);
             } else {
-                //System.out.println("ww");
                 g.setColor(Color.WHITE);
             }
             if(selected.equals(c.getValue())){
                 g.setColor(Color.red);
             }
-            g.fillOval((int) c.getGUIData("pos_x"), (int) c.getGUIData("pos_y"), (int) c.getGUIData("size_x"), (int) c.getGUIData("size_y"));
+//            g.fillOval((int) c.getGUIData("pos_x"), (int) c.getGUIData("pos_y"), (int) c.getGUIData("size_x"), (int) c.getGUIData("size_y"));
+            g.fillOval(c.getGUIData("pos_x"), c.getGUIData("pos_y"), size_x, size_y);
             g.setColor(Color.BLACK);
-            g.drawString(c.getValue(), (int) c.getGUIData("mid_x"), (int) c.getGUIData("mid_y"));
-            if(c.getParent()!=null) g.drawLine((int) c.getGUIData("mid_x"), (int) c.getGUIData("mid_y"), c.getParent().getGUIData("mid_x"), c.getParent().getGUIData("mid_y"));
-            
+            g.drawString(c.getValue(), c.getGUIData("mid_x"), c.getGUIData("mid_y"));
+            if(c.getParent()!=null){
+                g.drawLine((int) c.getGUIData("mid_x"), (int) c.getGUIData("mid_y"), c.getParent().getGUIData("mid_x"), c.getParent().getGUIData("mid_y"));
+            }
         }
     }
     

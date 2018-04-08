@@ -28,16 +28,10 @@ public class Concept {
         this.GUIData = new HashMap<>();
     }
     
-    public void setGUIData(int level, int pos_x, int pos_y, int size_x, int size_y, int mid_x, int mid_y){
-        this.GUIData.put("level",level);
-        this.GUIData.put("pos_x",pos_x);
-        this.GUIData.put("pos_y",pos_y);
-        this.GUIData.put("size_x",size_x);
-        this.GUIData.put("size_y",size_y);
-        this.GUIData.put("mid_x",mid_x);
-        this.GUIData.put("mid_y",mid_y);
+    public void setGUIData(String variable, int value){
+        this.GUIData.put(variable,value);
     }
-    
+            
     public int getGUIData(String data){
         return this.GUIData.get(data);
     }

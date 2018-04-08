@@ -145,9 +145,7 @@ public class ConceptList {
         }return list;
     }
     
-    public void setConceptGUI(String value, int level, int pos_x, int pos_y, int size_x, int size_y, int mid_x, int mid_y){
-        mid_x = pos_x + (size_x/2);
-        mid_y = pos_y + (size_y/2);
-        search(value).setGUIData(level, pos_x, pos_y, size_x, size_y, mid_x, mid_y);
+    public void setConceptGUI(String value, int level){
+        search(value).setGUIData("level",level);
     }
 }

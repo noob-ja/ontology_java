@@ -42,15 +42,11 @@ public class GUI {
                 String text;
                 text = JOptionPane.showInputDialog("Input Super Node");
                 conceptlist.setSuper(text);
-                //set GUI data
-                conceptlist.setConceptGUI(text,0, 20, 20, 100, 50, 0, 0);
-                //recreate draw here
+                conceptlist.setConceptGUI(text,1);
                 redraw();
-//                frame.revalidate();
-//                frame.repaint();
             }
         });
-        frame.add(button1);
+//        frame.add(button1);
         
                 
         JButton button2 = new JButton("Add parent");
@@ -65,16 +61,16 @@ public class GUI {
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String text;
-                text = JOptionPane.showInputDialog("Input Child Node");
-                conceptlist.addChild(drawPanel.getSelected(), text);
-                //set GUI data
-                conceptlist.setConceptGUI(text, conceptlist.search(drawPanel.getSelected()).getGUIData("level")+1, 70, 0, 100, 50, 0, 0);
-                checkOverlapping(conceptlist.getAll());
-                //recreate draw here
-                redraw();
-//                frame.revalidate();
-//                frame.repaint();
+                if(drawPanel.getSelected()==null){
+                    //prompt user to select a concept
+                }else{
+                    String text;
+                    text = JOptionPane.showInputDialog("Input Child Node");
+                    conceptlist.addChild(drawPanel.getSelected(), text);
+                    conceptlist.setConceptGUI(text, conceptlist.search(drawPanel.getSelected()).getGUIData("level")+1);
+//                    checkOverlapping(conceptlist.getAll());
+                    redraw();
+                }
             }
         });
         //frame.add(button3);
@@ -93,9 +89,6 @@ public class GUI {
         panelB.add(button3,c);
         frame.add(panelB,BorderLayout.WEST);
         
-//        frame.add(draw);
-//        drawPanel = new Draw(this.conceptlist);
-//        frame.add(drawPanel,BorderLayout.CENTER);
         redraw();
         
         frame.setVisible(true);
