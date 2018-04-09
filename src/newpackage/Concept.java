@@ -18,13 +18,11 @@ public class Concept {
     private ArrayList<Concept> child;
     private String value;
     private HashMap<String,Integer> GUIData;
-    public int ID;
     
-    public Concept(String v, int ID){
+    public Concept(String v){
         parent = null;
         child = new ArrayList<>();
         this.value = v;
-        this.ID = ID;
         this.GUIData = new HashMap<>();
     }
     

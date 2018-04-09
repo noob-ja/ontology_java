@@ -42,7 +42,6 @@ public class GUI {
                     String text;
                     text = JOptionPane.showInputDialog("Input Super Node");
                     conceptlist.setSuper(text);
-                    conceptlist.setConceptGUI(text,1);
                     redraw();
                 
                 
@@ -64,9 +63,6 @@ public class GUI {
                     String text;
                     text = JOptionPane.showInputDialog("Input Parent Node");
                     conceptlist.addParent(drawPanel.getSelected(), text);
-                   // conceptlist.setConceptGUI(text, conceptlist.search(drawPanel.getSelected()).getGUIData("level")+1);
-                  //conceptlist.setConceptGUI(text, conceptlist.search(drawPanel.getSelected()).getGUIData("level")+1);
-//                    checkOverlapping(conceptlist.getAll());
                     redraw();
                 }
             }
@@ -87,8 +83,6 @@ public class GUI {
                     String text;
                     text = JOptionPane.showInputDialog("Input Child Node");
                     conceptlist.addChild(drawPanel.getSelected(), text);
-                    conceptlist.setConceptGUI(text, conceptlist.search(drawPanel.getSelected()).getGUIData("level")+1);
-//                    checkOverlapping(conceptlist.getAll());
                     redraw();
                 }
             }
@@ -104,7 +98,6 @@ public class GUI {
                     JOptionPane.showMessageDialog(null, "Please select a node.");
                 }else{
                     conceptlist.removeBranch(drawPanel.getSelected());
-//                    checkOverlapping(conceptlist.getAll());
                     redraw();
                 }
             }
@@ -120,7 +113,6 @@ public class GUI {
                     JOptionPane.showMessageDialog(null, "Please select a node.");
                 }else{
                     conceptlist.removeSelf(drawPanel.getSelected());
-//                    checkOverlapping(conceptlist.getAll());
                     redraw();
                 }
             }
@@ -155,6 +147,7 @@ public class GUI {
     public void redraw(){
         if(this.drawPanel!=null) this.frame.remove(this.drawPanel);
         this.drawPanel = new Draw(this.conceptlist);
+        this.conceptlist.printTreeGraphic();
         this.frame.add(this.drawPanel,BorderLayout.CENTER);
         this.frame.revalidate();
         this.frame.repaint();

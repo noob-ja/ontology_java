@@ -6,7 +6,6 @@
 
 package newpackage;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -22,7 +21,7 @@ public class CLI {
      */
     public static void main(String[] args) {
         
-        GUI gui = new GUI();
+        GUI GUI = new GUI();
         //CLI cli = new CLI();
     }
     

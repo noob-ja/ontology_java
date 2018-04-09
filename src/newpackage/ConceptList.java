@@ -14,11 +14,11 @@ import java.util.ArrayList;
  */
 public class ConceptList {
     private Concept superConcept;
-    public int count = 0;
     private boolean debug = false;
     
     public void setSuper(String value){
-        superConcept = new Concept(value,count++);
+        superConcept = new Concept(value);
+        superConcept.setGUIData("level", 1);
     }
     
     public boolean setValue(String value, String newValue){
@@ -36,34 +36,32 @@ public class ConceptList {
         if(search(value)!=null){
             newParent = search(value);
         }else{
-            newParent = new Concept(value,count++);
+            newParent = new Concept(value);
             newParent.setParent(child.getParent());
             child.getParent().addChild(newParent);
         }
         newParent.addChild(child);
         child.getParent().removeChild(child);
         child.setParent(newParent);
-        //loop through each child of the ori node to increment level
+        updateLevel();
         return true;
     }
     
     public boolean addChild(String ID, String value){
-        System.out.println(ID);
-        printTreeGraphic();
         Concept parent = search(ID);
         if(debug) System.out.println(value+" add to "+parent.getValue());
         if(search(value)!=null){
             return false;
         }
-        Concept child = new Concept(value,count++);
+        Concept child = new Concept(value);
         child.setParent(parent);
         parent.addChild(child);
+        updateLevel();
         return true;
     }
     
     public boolean removeSelf(String ID){
         if(ID==superConcept.getValue()) return false;
-        //Search concept
         Concept self = search(ID);
         for(Concept child : self.getChild()){
             child.setParent(self.getParent());
@@ -72,6 +70,7 @@ public class ConceptList {
         self.getParent().removeChild(self);
         self.setParent(null);
         self.clearChild();
+        updateLevel();
         return true;
     }
     
@@ -81,18 +80,6 @@ public class ConceptList {
         self.getParent().removeChild(self);
         self.setParent(null);
         return true;
-    }
-    
-    public void printTree(){
-        if(this.superConcept==null) return;
-        printTree(this.superConcept);
-    }
-    
-    public void printTree(Concept c){
-        for (int i=0; i<c.getChild().size(); i++){
-            printTree(c.getChild().get(i));
-        }
-        System.out.println(c.getValue());
     }
     
     public void printTreeGraphic(){
@@ -134,6 +121,18 @@ public class ConceptList {
         return res;
     }
     
+    public void updateLevel(){
+        updateLevel(superConcept,1);
+    }
+    
+    public void updateLevel(Concept c, int level){
+        c.setGUIData("level", level);
+        ArrayList<Concept> childConcept = c.getChild();
+        for(int i=0;i<childConcept.size();i++){
+            updateLevel(childConcept.get(i),level+1);
+        }
+    }
+    
     public ArrayList<Concept> getAll(){
         if(this.superConcept==null) return new ArrayList<Concept>();
         return getAll(new ArrayList<Concept>(), this.superConcept);
@@ -146,7 +145,4 @@ public class ConceptList {
         }return list;
     }
     
-    public void setConceptGUI(String value, int level){
-        search(value).setGUIData("level",level);
-    }
 }

@@ -49,7 +49,7 @@ public class Draw extends JPanel {
             size = this.size_x + (this.size_pad*2);
         }else{
             for(int i=0;i<c.getChildSize();i++){
-                size += setSize(c.getChild().get(i),size);
+                size += setSize(c.getChild().get(i),size+offset_x);
             }
         }
         c.setGUIData("mid_x", size/2+offset_x);
