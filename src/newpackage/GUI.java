@@ -41,8 +41,11 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {               
                     String text;
                     text = JOptionPane.showInputDialog("Input Super Node");
-                    conceptlist.setSuper(text);
-                    redraw();
+                    if(text != null){
+                        conceptlist.setSuper(text);
+                        redraw();
+                    }
+                    
                 
                 
             }
@@ -62,8 +65,11 @@ public class GUI {
                 }else{
                     String text;
                     text = JOptionPane.showInputDialog("Input Parent Node");
-                    conceptlist.addParent(drawPanel.getSelected(), text);
-                    redraw();
+                    if(text != null){
+                        conceptlist.addParent(drawPanel.getSelected(), text);
+                        redraw();
+                    }
+                    
                 }
             }
         });
@@ -81,9 +87,12 @@ public class GUI {
                      JOptionPane.showMessageDialog(null, "Please select a node.");
                 }else{
                     String text;
-                    text = JOptionPane.showInputDialog("Input Child Node");
-                    conceptlist.addChild(drawPanel.getSelected(), text);
-                    redraw();
+                    text = JOptionPane.showInputDialog(null,"Input Child Node");
+                    if(text != null){
+                        conceptlist.addChild(drawPanel.getSelected(), text);
+                        redraw();
+                    }
+                    
                 }
             }
         });

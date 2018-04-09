@@ -7,6 +7,7 @@
 package newpackage;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,10 +32,18 @@ public class ConceptList {
     }
     
     public boolean addParent(String ID, String value){
+        if(ID == superConcept.getValue()){
+            JOptionPane.showMessageDialog(null,"Super concept cannot add parent");
+            return false;
+        }
+        System.out.println("ssssss"+ID);
+        System.out.println(value);
         Concept child = search(ID);
         Concept newParent;
         if(search(value)!=null){
-            newParent = search(value);
+            JOptionPane.showMessageDialog(null, value+" already exits");
+            //newParent = search(value);
+            return false;
         }else{
             newParent = new Concept(value);
             newParent.setParent(child.getParent());
@@ -51,6 +60,7 @@ public class ConceptList {
         Concept parent = search(ID);
         if(debug) System.out.println(value+" add to "+parent.getValue());
         if(search(value)!=null){
+            JOptionPane.showMessageDialog(null, value+" already exits");
             return false;
         }
         Concept child = new Concept(value);
