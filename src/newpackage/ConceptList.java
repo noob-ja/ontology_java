@@ -36,8 +36,8 @@ public class ConceptList {
             JOptionPane.showMessageDialog(null,"Super concept cannot add parent");
             return false;
         }
-        System.out.println("ssssss"+ID);
-        System.out.println(value);
+        //System.out.println("ssssss"+ID);
+        //System.out.println(value);
         Concept child = search(ID);
         Concept newParent;
         if(search(value)!=null){
