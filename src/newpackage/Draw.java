@@ -6,8 +6,10 @@
 package newpackage;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -27,6 +29,7 @@ public class Draw extends JPanel {
     String inside = "";
     String selected = "";
     
+    int totalheight = 0;
     int treeSize = 0;
     int treeCenter = 0;
     final int size_x = 100;
@@ -56,13 +59,16 @@ public class Draw extends JPanel {
         c.setGUIData("mid_y", (c.getGUIData("level")-1)*level_height+(level_height/2));
         c.setGUIData("pos_x", c.getGUIData("mid_x")-size_x/2);
         c.setGUIData("pos_y", c.getGUIData("mid_y")-size_y/2);
+        if(this.totalheight<c.getGUIData("level")*level_height) this.totalheight=c.getGUIData("level")*level_height;
         return size;
     }
 
     public Draw(ConceptList conceptlist) {
         this.concepts = conceptlist.getAll();
+        this.setLayout(new GridLayout());
         setSize();
         repaint();
+        this.setPreferredSize(new Dimension(treeSize,totalheight));
 
         addMouseMotionListener(new MouseMotionListener() {
             @Override

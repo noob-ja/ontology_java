@@ -6,6 +6,7 @@
 package newpackage;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneLayout;
 
 /**
  *
@@ -31,11 +33,8 @@ public class GUI {
     public GUI(){
         conceptlist = new ConceptList();
         frame= new JFrame("NM Exam");
-        frame.setSize(1000, 1000);
+        frame.setSize(800, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        this.jsp = new JScrollPane(this.drawPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        
         
         JButton button1 = new JButton("Add super");
         button1.setSize(100,100);
@@ -54,8 +53,6 @@ public class GUI {
                 
             }
         });
-//        frame.add(button1);
-        
                 
         JButton button2 = new JButton("Add parent");
         button2.setSize(100,100);
@@ -77,8 +74,6 @@ public class GUI {
                 }
             }
         });
-        
-        //frame.add(button2);
         
         JButton button3 = new JButton("Add child");
         button3.setSize(100,100);
@@ -130,7 +125,6 @@ public class GUI {
                 }
             }
         });
-        //frame.add(button3);
         
         JPanel panelB = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -152,22 +146,18 @@ public class GUI {
         panelB.add(button5,c);
         frame.add(panelB,BorderLayout.WEST);
         
-//        JScrollPane jsp = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-//        frame.add(jsp,BorderLayout.CENTER);
-        frame.add(jsp);
         redraw();
         
         frame.setVisible(true);
     }
     
     public void redraw(){
-        if(this.drawPanel!=null) this.jsp.remove(this.drawPanel);
+        if(this.drawPanel!=null) this.frame.remove(this.jsp);
         this.drawPanel = new Draw(this.conceptlist);
+        this.jsp = new JScrollPane(this.drawPanel);
+        this.drawPanel.setBackground(Color.gray);
         this.conceptlist.printTreeGraphic();
-        this.jsp.add(this.drawPanel);
-        this.jsp.repaint();
-        this.frame.remove(jsp);
-        this.frame.add(jsp);
+        this.frame.add(this.jsp, BorderLayout.CENTER);
         this.frame.revalidate();
         this.frame.repaint();
     }
@@ -178,7 +168,7 @@ public class GUI {
             Concept con = concepts.get(i);
             for (int j = 0; j < concepts.size(); j++) {
                 if(i == j){
-                continue;
+                    continue;
                 }
                 else{
                     Concept con2 = concepts.get(j);
@@ -190,21 +180,13 @@ public class GUI {
                     float a2 = (float) Math.pow(con.getGUIData("pos_x")+con.getGUIData(("size_x")) - con2.getGUIData("mid_x"), 2);
                     float b2 = (float) Math.pow(con.getGUIData("mid_y") - con2.getGUIData("mid_y"), 2);
                     float total2 = a2 / rx2 + b2 / ry2;
-                    
-                    //System.out.println(total);
                     if (total <= 1 || total <= 1) {
-                        //System.out.println("inside");
                         overlap = con.getValue();
-                        System.out.println("overlap");
-                        //System.out.println(inside);
                         break;
-                        
                     }
                     else{
-                        System.out.println("no");
                         overlap = "";
                     }
-                    System.out.println(overlap);
                 }
             }
             
