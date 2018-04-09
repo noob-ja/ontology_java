@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -25,12 +26,15 @@ public class GUI {
     private ConceptList conceptlist;
     private Draw drawPanel;
     private JFrame frame;
+    private JScrollPane jsp;
     
     public GUI(){
         conceptlist = new ConceptList();
         frame= new JFrame("NM Exam");
         frame.setSize(1000, 1000);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        this.jsp = new JScrollPane(this.drawPanel,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         
         
         JButton button1 = new JButton("Add super");
@@ -148,16 +152,22 @@ public class GUI {
         panelB.add(button5,c);
         frame.add(panelB,BorderLayout.WEST);
         
+//        JScrollPane jsp = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+//        frame.add(jsp,BorderLayout.CENTER);
+        frame.add(jsp);
         redraw();
         
         frame.setVisible(true);
     }
     
     public void redraw(){
-        if(this.drawPanel!=null) this.frame.remove(this.drawPanel);
+        if(this.drawPanel!=null) this.jsp.remove(this.drawPanel);
         this.drawPanel = new Draw(this.conceptlist);
         this.conceptlist.printTreeGraphic();
-        this.frame.add(this.drawPanel,BorderLayout.CENTER);
+        this.jsp.add(this.drawPanel);
+        this.jsp.repaint();
+        this.frame.remove(jsp);
+        this.frame.add(jsp);
         this.frame.revalidate();
         this.frame.repaint();
     }
